@@ -1,0 +1,14 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+[x-cloak] {
+    display: none;
+}
+
+/* In your app.css */
+.login-background {
+    background-image: url('/img/Login_background.png');
+    background-size: cover;
+    background-position: center;
+}

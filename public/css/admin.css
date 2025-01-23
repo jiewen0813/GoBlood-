@@ -1,0 +1,105 @@
+/* Sidebar */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 250px;
+    height: 100%;
+    background-color: #8B0000;
+    color: white;
+    transition: transform 0.3s ease;
+    transform: translateX(-100%); /* Hidden by default */
+    z-index: 9999;
+}
+
+.sidebar.open {
+    transform: translateX(0); /* Slide in when open */
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar a {
+    display: block;
+    padding: 15px;
+    text-decoration: none;
+    color: white;
+    transition: background-color 0.3s;
+}
+
+.sidebar a:hover {
+    background-color: #a93226;
+}
+
+#main {
+    transition: margin-left 0.3s ease; /* Smooth transition for push effect */
+    margin-left: 0; /* Initially aligned */
+}
+
+#main.push {
+    margin-left: 250px; /* Push to the right when sidebar is open */
+}
+
+/* Burger Menu */
+.burger-menu {
+    display: block;
+    cursor: pointer;
+}
+
+.burger-menu .bar {
+    width: 25px;
+    height: 3px;
+    background-color: white;
+    margin: 4px;
+}
+
+/* Large Screen */
+@media (min-width: 769px) {
+    .burger-menu {
+        display: block; /* Keep burger visible on large screens */
+    }
+
+    .sidebar {
+        transform: translateX(-100%); /* Sidebar hidden by default on large screens */
+    }
+
+    /* Show sidebar when open */
+    .sidebar.open {
+        transform: translateX(0); /* Sidebar shown when 'open' class is added */
+    }
+}
+
+/* Small Screen */
+@media (max-width: 768px) {
+    .burger-menu {
+        display: block;
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        z-index: 10000;
+    }
+
+    .sidebar {
+        transform: translateX(-100%); /* Hidden by default on small screens */
+    }
+
+    /* Show sidebar when open */
+    .sidebar.open {
+        transform: translateX(0); /* Sidebar shown when 'open' class is added */
+    }
+}
+
+.blood-drop-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+    width: 60px;
+    height: 90px;
+}
+
+.blood-fill {
+    transition: height 0.3s ease-in-out; /* Smooth transition for height changes */
+}
