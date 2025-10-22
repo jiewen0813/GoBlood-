@@ -61,7 +61,7 @@
                                         <td class="border border-gray-300 px-4 py-2">
                                             @if ($redemption->qr_code_path && Storage::disk('public')->exists($redemption->qr_code_path))
                                                 <!-- Render QR Code as an Image -->
-                                                <img src="{{ asset('storage/' . $redemption->qr_code_path) }}" alt="QR Code" class="w-16 h-16">
+                                                <img src="{{ Storage::url($redemption->qr_code_path) }}" alt="QR Code" class="w-16 h-16">
                                             @else
                                                 N/A
                                             @endif
@@ -78,9 +78,9 @@
                                         </td>
                                         <td class="border border-gray-300 px-4 py-2">
                                             @if ($redemption->is_used)
-                                                <span class="text-green-600 font-semibold">Used</span><br>
+                                                <span class="text-red-600 font-semibold">Used</span><br>
                                             @else
-                                                <span class="text-red-600 font-semibold">Unused</span>
+                                                <span class="text-green-600 font-semibold">Unused</span>
                                             @endif
                                         </td>
                                     </tr>

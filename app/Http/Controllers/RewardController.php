@@ -129,4 +129,22 @@ class RewardController extends Controller
         // Return the view with the redemption data
         return view('rewards.myrewards', compact('redemptions', 'points'));
     }
+
+    public function destroy($id)
+    {
+        // Find the redemption record
+        $redemption = Redemption::findOrFail($id);
+
+        // Check if the QR code file exists
+        if ($redemption->qr_code_path && Storage::disk('public')->exists($redemption->qr_code_path)) {
+            // Delete the QR code file
+            Storage::disk('public')->delete($redemption->qr_code_path);
+        }
+
+        // Delete the redemption record
+        $redemption->delete();
+
+        // Redirect or return response
+        return redirect()->route('rewards.myrewards')->with('success', 'Redemption deleted successfully!');
+    }
 }

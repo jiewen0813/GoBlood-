@@ -33,7 +33,7 @@
             <table class="table-auto w-full border-collapse">
                 <thead>
                     <tr>
-                        <th class="px-4 py-2 border-b">Donor Name</th>
+                        <th class="px-4 py-2 border-b">Donor IC</th>
                         <th class="px-4 py-2 border-b">Blood Serial No.</th> 
                         <th class="px-4 py-2 border-b">Quantity (units)</th>
                         <th class="px-4 py-2 border-b">Event/Appointment</th>
@@ -45,7 +45,7 @@
                 <tbody>
                     @foreach ($donations as $donation)
                         <tr>
-                            <td class="px-4 py-2 border-b">{{ $donation->user->name ?? 'Unknown Donor' }}</td>
+                            <td class="px-4 py-2 border-b">{{ $donation->user->ic_number ?? 'Unknown Donor' }}</td>
                             <td class="px-4 py-2 border-b">{{ $donation->blood_serial_no ?? 'N/A' }}</td>
                             <td class="px-4 py-2 border-b">{{ $donation->quantity }}</td>
                             <td class="px-4 py-2 border-b">

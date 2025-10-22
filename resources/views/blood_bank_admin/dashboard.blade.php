@@ -12,6 +12,7 @@
 <div class="container mt-4">
     <!-- Blood Collection Graphs -->
     <div class="row">
+        <!-- Daily Blood Collection -->
         <div class="col-md-6 mb-4">
             <div class="card shadow">
                 <div class="card-body">
@@ -21,12 +22,27 @@
                 </div>
             </div>
         </div>
+
+        <!-- Monthly Blood Collection -->
         <div class="col-md-6 mb-4">
             <div class="card shadow">
                 <div class="card-body">
                     <h5 class="card-title">Monthly Blood Collection</h5>
                     <canvas id="monthlyChart" width="400" height="200"></canvas>
                     <button id="exportMonthlyChart" class="btn btn-primary mt-3">Download Monthly Graph</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Blood Collected by Blood Type per Month -->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card shadow">
+                <div class="card-body">
+                    <h5 class="card-title">Blood Collected by Blood Type per Month</h5>
+                    <canvas id="bloodTypeMonthlyChart"></canvas>
+                    <button id="exportBloodTypeChart" class="btn btn-primary mt-3">Download Blood Type Graph</button>
                 </div>
             </div>
         </div>
@@ -56,18 +72,10 @@
         options: {
             responsive: true,
             plugins: {
-                title: {
-                    display: true,
-                    text: 'Blood Collected in Last 7 Days'
-                }
+                title: { display: true, text: 'Blood Collected in Last 7 Days' }
             },
             scales: {
-                y: {
-                    beginAtZero: true,
-                    ticks: {
-                        stepSize: 1 // Whole numbers
-                    }
-                }
+                y: { beginAtZero: true, ticks: { stepSize: 1 } }
             }
         }
     });
@@ -93,36 +101,78 @@
         options: {
             responsive: true,
             plugins: {
-                title: {
-                    display: true,
-                    text: 'Blood Collected in Last 12 Months'
-                }
+                title: { display: true, text: 'Blood Collected in Last 12 Months' }
             },
             scales: {
-                y: {
-                    beginAtZero: true,
-                    ticks: {
-                        stepSize: 1 // Whole numbers
-                    }
-                }
+                y: { beginAtZero: true, ticks: { stepSize: 1 } }
             }
         }
     });
 
-    // Export Daily Graph as Image
-    document.getElementById('exportDailyChart').addEventListener('click', function () {
-        const link = document.createElement('a');
-        link.href = dailyChart.toBase64Image();
-        link.download = 'daily_blood_collection_graph.png';
-        link.click();
+    // Blood Type Monthly Data for Stacked Bar Chart
+    const bloodTypeMonthlyData = @json($bloodTypeMonthlyData);
+
+    // Extract unique months and blood types
+    const months = [...new Set(bloodTypeMonthlyData.map(item => item.month))];
+    const bloodTypes = [...new Set(bloodTypeMonthlyData.map(item => item.blood_type))];
+
+    // Prepare dataset for stacked chart
+    const datasets = bloodTypes.map(type => {
+        return {
+            label: type,
+            data: months.map(month => {
+                const entry = bloodTypeMonthlyData.find(item => item.month === month && item.blood_type === type);
+                return entry ? entry.total_collected : 0;
+            }),
+            backgroundColor: getRandomColor()
+        };
     });
 
-    // Export Monthly Graph as Image
-    document.getElementById('exportMonthlyChart').addEventListener('click', function () {
-        const link = document.createElement('a');
-        link.href = monthlyChart.toBase64Image();
-        link.download = 'monthly_blood_collection_graph.png';
-        link.click();
+    // Get the canvas context
+    const bloodTypeMonthlyCtx = document.getElementById("bloodTypeMonthlyChart").getContext("2d");
+    // Stacked Bar Chart for Blood Type Per Month
+    const bloodTypeMonthlyChart = new Chart(bloodTypeMonthlyCtx, {
+        type: "bar",
+        data: {
+            labels: months.map(month => new Date(month + "-01").toLocaleString('default', { month: 'short', year: 'numeric' })),
+            datasets: datasets
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { position: "top" },
+                title: { display: true, text: "Blood Collected by Blood Type per Month" }
+            },
+            scales: {
+                x: { stacked: true },
+                y: { stacked: true, beginAtZero: true }
+            }
+        }
     });
+
+    // Random Color Generator
+    function getRandomColor() {
+        return `rgba(${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, 0.6)`;
+    }
+
+    // Export Graphs as Image
+    document.getElementById('exportDailyChart').addEventListener('click', function () {
+        exportChart(dailyChart, 'daily_blood_collection_graph.png');
+    });
+
+    document.getElementById('exportMonthlyChart').addEventListener('click', function () {
+        exportChart(monthlyChart, 'monthly_blood_collection_graph.png');
+    });
+
+    document.getElementById('exportBloodTypeChart').addEventListener('click', function () {
+        exportChart(bloodTypeMonthlyChart, 'blood_collected_by_type_per_month.png');
+    });
+
+    function exportChart(chart, filename) {
+        const link = document.createElement('a');
+        link.href = chart.toBase64Image();
+        link.download = filename;
+        link.click();
+    }
 </script>
 @endsection

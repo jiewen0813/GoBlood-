@@ -20,7 +20,7 @@
                 <select name="user_id" id="user_id" class="mt-1 p-2 border border-gray-300 rounded-lg w-full" required>
                     @foreach ($users as $user)
                         <option value="{{ $user->id }}" {{ $donation->user_id == $user->id ? 'selected' : '' }}>
-                            {{ $user->name }}
+                            {{ $user->ic_number }}
                         </option>
                     @endforeach
                 </select>

@@ -146,6 +146,8 @@
             @else
                 <p class="text-gray-500 mt-4">Please select a blood bank to view the inventory.</p>
             @endif
+
+            <p class="text-gray-500 mt-4">Note: The full stock capacity for each blood type is 100 units.</p>
         </div>
     </div>
 
